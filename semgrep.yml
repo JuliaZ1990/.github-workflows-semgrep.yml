@@ -1,0 +1,26 @@
+name: Semgrep Scan
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  semgrep-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Semgrep
+        run: |
+          curl -sL https://semgrep.dev/install.sh | bash -s -- -c stable
+          export PATH="$PATH:$HOME/.local/bin"
+        shell: bash
+
+      - name: Run Semgrep
+        run: semgrep --config my_rules.yml .
